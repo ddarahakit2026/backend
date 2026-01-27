@@ -8,6 +8,20 @@ import java.sql.ResultSet;
 import java.sql.Statement;
 
 public class BoardRepository {
+    // -- BoardRepository 클래스에 싱글톤 디자인 패턴 적용--
+    private BoardRepository() {
+
+    }
+
+    private static class SingletonHolder {
+        private static final BoardRepository instance = new BoardRepository();
+    }
+
+    public static BoardRepository getInstance() {
+        return SingletonHolder.instance;
+    }
+    // -- BoardRepository 클래스에 싱글톤 디자인 패턴 적용--
+
     public BoardDto create(BoardDto dto) {
         try {
             Class.forName("org.mariadb.jdbc.Driver");
@@ -20,7 +34,6 @@ public class BoardRepository {
                 if (affectedRows > 0) {
                     ResultSet rs = stmt.getGeneratedKeys();
                     if(rs.next()) {
-                        // DB 실행결과를 새로운 DTO에 담아서 반환 (요청DTO와 응답DTO는 다른 경우가 많기 때문에 굳이 따로 만들어봤음)
                         BoardDto returnDto = new BoardDto(
                                 rs.getInt(1),
                                 dto.getTitle(),

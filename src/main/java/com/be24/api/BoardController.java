@@ -18,14 +18,12 @@ import java.io.IOException;
 public class BoardController extends HttpServlet {
     @Override
     protected void doPost(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
-        // JSON 형식으로 클라이언트가 전달한 요청을 처리
         BoardDto dto = JsonParser.from(req, BoardDto.class);
 
-        BoardService boardService = new BoardService();
-        // 서비스의 결과를 반환받게 변경
+        // BoardService 클래스에 싱글톤 적용, new로 생성 못하니까 메소드로 객체 가져옴
+        BoardService boardService = BoardService.getInstance();
         BoardDto returnDto = boardService.register(dto);
 
-        // JSON 형식으로 응답을 처리
         BaseResponse res = BaseResponse.success(returnDto);
         resp.getWriter().write(JsonParser.from(res));
     }
