@@ -7,9 +7,8 @@ import java.sql.DriverManager;
 import java.sql.ResultSet;
 import java.sql.Statement;
 
-// DB에 CRUD하는 부분 역할 분리
 public class BoardRepository {
-    public void create(BoardDto dto) {
+    public BoardDto create(BoardDto dto) {
         try {
             Class.forName("org.mariadb.jdbc.Driver");
             Connection conn = DriverManager.getConnection("jdbc:mariadb://10.10.10.30:3306/test", "root", "qwer1234");
@@ -20,13 +19,21 @@ public class BoardRepository {
                 );
                 if (affectedRows > 0) {
                     ResultSet rs = stmt.getGeneratedKeys();
-                    if (rs.next()) {
-                        System.out.println("저장한 게시글의 idx : " + rs.getInt(1));
+                    if(rs.next()) {
+                        // DB 실행결과를 새로운 DTO에 담아서 반환 (요청DTO와 응답DTO는 다른 경우가 많기 때문에 굳이 따로 만들어봤음)
+                        BoardDto returnDto = new BoardDto(
+                                rs.getInt(1),
+                                dto.getTitle(),
+                                dto.getContents()
+                        );
+                        return returnDto;
                     }
                 }
             }
         } catch (Exception e) {
             throw new RuntimeException(e);
         }
+
+        return null;
     }
 }

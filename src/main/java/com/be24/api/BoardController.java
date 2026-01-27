@@ -2,6 +2,8 @@ package com.be24.api;
 
 
 import com.be24.api.model.BoardDto;
+import com.be24.api.common.BaseResponse;
+import com.be24.api.utils.JsonParser;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.annotation.WebServlet;
 import jakarta.servlet.http.HttpServlet;
@@ -12,21 +14,19 @@ import java.io.IOException;
 
 
 
-@WebServlet(urlPatterns = {"/board/register"}) // /board/read 주소랑, /board/register 주소로 클라이어트가 요청을 보내면 실행되는 코드
+@WebServlet(urlPatterns = {"/board/register"})
 public class BoardController extends HttpServlet {
-
     @Override
     protected void doPost(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
-        // 데이터 전달받아서 DTO에 담기
-        // DTO로 역할 분리
-        BoardDto dto = BoardDto.toDto(req);
+        // JSON 형식으로 클라이언트가 전달한 요청을 처리
+        BoardDto dto = JsonParser.from(req, BoardDto.class);
 
-        // 서비스의 메소드에 복잡한 로직을 처리하는 부분의 역할을 분리하고 호출해서 사용
         BoardService boardService = new BoardService();
-        boardService.register(dto); // 데이터를 처리할 수 있도록 매개변수로 DTO 전달
+        // 서비스의 결과를 반환받게 변경
+        BoardDto returnDto = boardService.register(dto);
 
-        // 응답하는 부분
-        resp.getWriter().write("잘 저장됨");
-
+        // JSON 형식으로 응답을 처리
+        BaseResponse res = BaseResponse.success(returnDto);
+        resp.getWriter().write(JsonParser.from(res));
     }
 }
