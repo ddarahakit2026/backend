@@ -5,6 +5,7 @@ import com.be24.api.common.Controller;
 import com.be24.api.model.BoardDto;
 import com.be24.api.common.BaseResponse;
 import com.be24.api.utils.JsonParser;
+import com.sun.source.tree.BreakTree;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpServlet;
 import jakarta.servlet.http.HttpServletRequest;
@@ -23,16 +24,17 @@ public class BoardController implements Controller {
     }
 
     @Override
-    public String process(HttpServletRequest req, HttpServletResponse resp) {
+    public BaseResponse process(HttpServletRequest req, HttpServletResponse resp) {
+        BoardDto returnDto = null;
+
         if (req.getRequestURI().contains("register") && req.getMethod().equals("POST")) {
             BoardDto dto = JsonParser.from(req, BoardDto.class);
-            BoardDto returnDto = boardService.register(dto);
+            returnDto = boardService.register(dto);
         } else if (req.getRequestURI().contains("read") && req.getMethod().equals("GET")) {
             String boardIdx = req.getParameter("idx");
-            BoardDto returnDto = boardService.read(boardIdx);
+            returnDto = boardService.read(boardIdx);
         }
 
-
-        return "";
+        return BaseResponse.success(returnDto);
     }
 }

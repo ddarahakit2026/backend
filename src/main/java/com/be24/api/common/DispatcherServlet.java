@@ -1,5 +1,6 @@
 package com.be24.api.common;
 
+import com.be24.api.utils.JsonParser;
 import jakarta.servlet.ServletConfig;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.annotation.WebServlet;
@@ -37,7 +38,7 @@ public class DispatcherServlet extends HttpServlet {
         }
 
         // 컨트롤러가 있으면 컨트롤러의 작업을 실행
-        controller.process(req, resp);
-
+        BaseResponse res = controller.process(req, resp);
+        resp.getWriter().write(JsonParser.from(res));
     }
 }
