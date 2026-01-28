@@ -3,6 +3,7 @@ package com.be24.api.common;
 import com.be24.api.utils.JsonParser;
 import jakarta.servlet.ServletConfig;
 import jakarta.servlet.ServletException;
+import jakarta.servlet.annotation.MultipartConfig;
 import jakarta.servlet.annotation.WebServlet;
 import jakarta.servlet.http.HttpServlet;
 import jakarta.servlet.http.HttpServletRequest;
@@ -10,8 +11,9 @@ import jakarta.servlet.http.HttpServletResponse;
 
 import java.io.IOException;
 
-// 모든 요청은 이 서블릿을 통해서 처리
 @WebServlet(urlPatterns = "/")
+// 파일 업로드 처릴 위해서 추가
+@MultipartConfig
 public class DispatcherServlet extends HttpServlet {
 
     private AppConfig appConfig;

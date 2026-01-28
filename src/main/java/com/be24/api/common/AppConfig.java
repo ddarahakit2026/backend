@@ -1,6 +1,9 @@
 package com.be24.api.common;
 
 import com.be24.api.board.*;
+import com.be24.api.image.ImageController;
+import com.be24.api.image.ImageRepository;
+import com.be24.api.image.ImageService;
 import com.be24.api.user.UserController;
 import com.zaxxer.hikari.HikariDataSource;
 
@@ -19,7 +22,10 @@ public class AppConfig {
     private final UserController userController = new UserController();
 
 
-
+    // 이미지 처리 기능
+    private final ImageRepository imageRepository = new ImageRepository();
+    private final ImageService imageService = new ImageService(imageRepository);
+    private final ImageController imageController = new ImageController(imageService);
 
 
     public AppConfig() {
@@ -31,6 +37,9 @@ public class AppConfig {
         controllerMap.put("/board/read", boardController);
         controllerMap.put("/user/signup", userController);
         controllerMap.put("/user/login", userController);
+
+        // URI 맵핑
+        controllerMap.put("/image/upload", imageController);
     }
 
     // 특정 uri를 이용해서 특정 컨트롤러 객체를 반환하는 메소드
