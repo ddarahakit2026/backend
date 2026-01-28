@@ -8,19 +8,28 @@ import java.sql.ResultSet;
 import java.sql.Statement;
 
 public class BoardRepository {
-    // -- BoardRepository 클래스에 싱글톤 디자인 패턴 적용--
-    private BoardRepository() {
 
-    }
+    public BoardDto read(String boardIdx) {
+        try {
+            Class.forName("org.mariadb.jdbc.Driver");
+            Connection conn = DriverManager.getConnection("jdbc:mariadb://10.10.10.30:3306/test", "root", "qwer1234");
+            try (Statement stmt = conn.createStatement()) {
+                ResultSet rs = stmt.executeQuery("SELECT * FROM board LEFT JOIN reply ON board.idx=reply.boardIdx WHERE board.idx=" + boardIdx);
 
-    private static class SingletonHolder {
-        private static final BoardRepository instance = new BoardRepository();
-    }
+                if (rs.next()) {
+                    return new BoardDto(
+                            rs.getInt("board.idx"),
+                            rs.getString("board.title"),
+                            rs.getString("board.contents"));
+                }
 
-    public static BoardRepository getInstance() {
-        return SingletonHolder.instance;
+            }
+        } catch (Exception e) {
+            throw new RuntimeException(e);
+        }
+
+        return null;
     }
-    // -- BoardRepository 클래스에 싱글톤 디자인 패턴 적용--
 
     public BoardDto create(BoardDto dto) {
         try {
