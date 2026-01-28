@@ -1,6 +1,6 @@
-package com.be24.api;
+package com.be24.api.board;
 
-import com.be24.api.model.BoardDto;
+import com.be24.api.board.model.BoardDto;
 
 public class BoardService {
     private final BoardRepository boardRepository;

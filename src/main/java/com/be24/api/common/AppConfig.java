@@ -1,8 +1,8 @@
 package com.be24.api.common;
 
-import com.be24.api.BoardController;
-import com.be24.api.BoardRepository;
-import com.be24.api.BoardService;
+import com.be24.api.board.BoardController;
+import com.be24.api.board.BoardRepository;
+import com.be24.api.board.BoardService;
 import com.be24.api.user.UserController;
 
 import java.util.HashMap;

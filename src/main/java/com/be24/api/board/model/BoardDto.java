@@ -1,4 +1,4 @@
-package com.be24.api.model;
+package com.be24.api.board.model;
 
 import jakarta.servlet.http.HttpServletRequest;
 

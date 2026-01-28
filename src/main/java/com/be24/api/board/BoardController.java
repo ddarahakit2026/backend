@@ -1,17 +1,12 @@
-package com.be24.api;
+package com.be24.api.board;
 
 
 import com.be24.api.common.Controller;
-import com.be24.api.model.BoardDto;
+import com.be24.api.board.model.BoardDto;
 import com.be24.api.common.BaseResponse;
 import com.be24.api.utils.JsonParser;
-import com.sun.source.tree.BreakTree;
-import jakarta.servlet.ServletException;
-import jakarta.servlet.http.HttpServlet;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
-
-import java.io.IOException;
 
 
 // 라우팅 처리를 AppConfig에서 전부 처리하기 위해서 주석처리
