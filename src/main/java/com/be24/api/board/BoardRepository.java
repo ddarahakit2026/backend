@@ -8,6 +8,8 @@ import java.sql.ResultSet;
 import java.sql.Statement;
 
 public interface BoardRepository {
+
+
     public BoardDto read(String boardIdx);
     public BoardDto create(BoardDto dto);
 }

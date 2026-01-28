@@ -2,13 +2,13 @@ package com.be24.api.board;
 
 import com.be24.api.board.model.BoardDto;
 
+import javax.sql.DataSource;
 import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.ResultSet;
 import java.sql.Statement;
 
 public class BoardRepositoryImpl implements BoardRepository {
-
     public BoardDto read(String boardIdx) {
         try {
             Class.forName("org.mariadb.jdbc.Driver");
