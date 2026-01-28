@@ -22,7 +22,7 @@ public class AppConfig {
 
     // 이미지 처리 기능
     private final ImageRepository imageRepository = new ImageRepository();
-    private final ImageService imageService = new ImageCloudServiceImpl();
+    private final ImageService imageService = new ImagePreSignedServiceImpl();
     private final ImageController imageController = new ImageController(imageService);
 
 

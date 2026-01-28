@@ -10,29 +10,38 @@ import software.amazon.awssdk.core.sync.RequestBody;
 import software.amazon.awssdk.regions.Region;
 import software.amazon.awssdk.services.s3.S3Client;
 import software.amazon.awssdk.services.s3.model.PutObjectRequest;
+import software.amazon.awssdk.services.s3.presigner.S3Presigner;
+import software.amazon.awssdk.services.s3.presigner.model.PresignedPutObjectRequest;
+import software.amazon.awssdk.services.s3.presigner.model.PutObjectPresignRequest;
 
 import java.io.IOException;
+import java.time.Duration;
 
-public class ImageCloudServiceImpl implements ImageService {
+public class ImagePreSignedServiceImpl implements ImageService{
     private final AwsCredentials credentials = AwsBasicCredentials.create(
-            System.getenv("AWS_ACCESS_KEY"), System.getenv("AWS_SECRET_KEY")
+        System.getenv("AWS_ACCESS_KEY"), System.getenv("AWS_SECRET_KEY")
     );
-    private final S3Client s3Client = S3Client.builder()
+    private final S3Presigner s3Presigner = S3Presigner.builder()
             .region(Region.AP_NORTHEAST_2)
             .credentialsProvider(StaticCredentialsProvider.create(credentials))
             .build();
 
     @Override
     public String upload(HttpServletRequest req) throws IOException, ServletException {
-        Part file = req.getPart("image");
+        String filename = req.getParameter("filename");
         PutObjectRequest putObjectRequest = PutObjectRequest.builder()
                 .bucket("be24-s3")
-                .key(file.getSubmittedFileName())
-                .contentType(file.getContentType())
-                .contentLength(file.getSize())
+                .key(filename)
                 .build();
-        s3Client.putObject(putObjectRequest, RequestBody.fromInputStream(file.getInputStream(), file.getSize()));
 
-        return "https://be24-s3.s3.ap-northeast-2.amazonaws.com/" + file.getSubmittedFileName();
+        PutObjectPresignRequest presignRequest = PutObjectPresignRequest.builder()
+                .signatureDuration(Duration.ofMinutes(1))
+                .putObjectRequest(putObjectRequest)
+                .build();
+
+        PresignedPutObjectRequest presignedRequest = s3Presigner.presignPutObject(presignRequest);
+        String uploadUrl = presignedRequest.url().toString();
+
+        return uploadUrl;
     }
 }

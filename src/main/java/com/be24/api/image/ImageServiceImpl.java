@@ -1,5 +1,7 @@
 package com.be24.api.image;
 
+import jakarta.servlet.ServletException;
+import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.Part;
 
 import java.io.IOException;
@@ -12,7 +14,8 @@ public class ImageServiceImpl implements ImageService {
         this.imageRepository = imageRepository;
     }
 
-    public String upload(Part file) throws IOException {
+    public String upload(HttpServletRequest req) throws IOException, ServletException {
+        Part file = req.getPart("image");
         file.write("c:\\uploads\\"+file.getSubmittedFileName());
 
         imageRepository.save(file.getSubmittedFileName());

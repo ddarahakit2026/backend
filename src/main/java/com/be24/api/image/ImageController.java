@@ -22,13 +22,12 @@ public class ImageController  implements Controller {
         System.out.println("ImageController 실행");
         Part part = null;
         try {
-            part = req.getPart("image");
-            imageService.upload(part);
+            String result = imageService.upload(req);
+            return BaseResponse.success(result);
         } catch (IOException e) {
             throw new RuntimeException(e);
         } catch (ServletException e) {
             throw new RuntimeException(e);
         }
-        return null;
     }
 }
