@@ -1,10 +1,7 @@
 package com.be24.api.common;
 
 import com.be24.api.board.*;
-import com.be24.api.image.ImageController;
-import com.be24.api.image.ImageRepository;
-import com.be24.api.image.ImageService;
-import com.be24.api.image.ImageServiceImpl;
+import com.be24.api.image.*;
 import com.be24.api.user.UserController;
 import com.zaxxer.hikari.HikariDataSource;
 
@@ -25,7 +22,7 @@ public class AppConfig {
 
     // 이미지 처리 기능
     private final ImageRepository imageRepository = new ImageRepository();
-    private final ImageService imageService = new ImageServiceImpl(imageRepository);
+    private final ImageService imageService = new ImageCloudServiceImpl();
     private final ImageController imageController = new ImageController(imageService);
 
 
