@@ -1,8 +1,6 @@
 package com.be24.api.common;
 
-import com.be24.api.board.BoardController;
-import com.be24.api.board.BoardRepository;
-import com.be24.api.board.BoardService;
+import com.be24.api.board.*;
 import com.be24.api.user.UserController;
 
 import java.util.HashMap;
@@ -10,7 +8,7 @@ import java.util.Map;
 
 public class AppConfig {
     private final Map<String, Controller> controllerMap = new HashMap<>();
-    private final BoardRepository boardRepository = new BoardRepository();
+    private final BoardRepository boardRepository = new BoardCpRepositoryImpl();
     private final BoardService boardService = new BoardService(boardRepository);
     private final BoardController boardController = new BoardController(boardService);
 
