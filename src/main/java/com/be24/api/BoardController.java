@@ -1,11 +1,12 @@
 package com.be24.api;
 
 
+import com.be24.api.common.Controller;
 import com.be24.api.model.BoardDto;
 import com.be24.api.common.BaseResponse;
 import com.be24.api.utils.JsonParser;
+import com.sun.source.tree.BreakTree;
 import jakarta.servlet.ServletException;
-import jakarta.servlet.annotation.WebServlet;
 import jakarta.servlet.http.HttpServlet;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
@@ -13,18 +14,27 @@ import jakarta.servlet.http.HttpServletResponse;
 import java.io.IOException;
 
 
+// 라우팅 처리를 AppConfig에서 전부 처리하기 위해서 주석처리
+//@WebServlet(urlPatterns = {"/board/register"})
+public class BoardController implements Controller {
+    private final BoardService boardService;
 
-@WebServlet(urlPatterns = {"/board/register"})
-public class BoardController extends HttpServlet {
+    public BoardController(BoardService boardService) {
+        this.boardService = boardService;
+    }
+
     @Override
-    protected void doPost(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
-        BoardDto dto = JsonParser.from(req, BoardDto.class);
+    public BaseResponse process(HttpServletRequest req, HttpServletResponse resp) {
+        BoardDto returnDto = null;
 
-        // BoardService 클래스에 싱글톤 적용, new로 생성 못하니까 메소드로 객체 가져옴
-        BoardService boardService = BoardService.getInstance();
-        BoardDto returnDto = boardService.register(dto);
+        if (req.getRequestURI().contains("register") && req.getMethod().equals("POST")) {
+            BoardDto dto = JsonParser.from(req, BoardDto.class);
+            returnDto = boardService.register(dto);
+        } else if (req.getRequestURI().contains("read") && req.getMethod().equals("GET")) {
+            String boardIdx = req.getParameter("idx");
+            returnDto = boardService.read(boardIdx);
+        }
 
-        BaseResponse res = BaseResponse.success(returnDto);
-        resp.getWriter().write(JsonParser.from(res));
+        return BaseResponse.success(returnDto);
     }
 }
