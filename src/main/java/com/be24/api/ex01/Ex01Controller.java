@@ -44,7 +44,16 @@ public class Ex01Controller implements Controller {
 
 
                     pstmt.executeUpdate();
-
+                    ResultSet rs = pstmt.getGeneratedKeys();
+                    if(rs.next()) {
+                        Ex01RegisterDtoRes returnDto = new Ex01RegisterDtoRes(
+                                rs.getInt(1),
+                                dto.getData01(),
+                                dto.getData02(),
+                                dto.getData03()
+                        );
+                        return BaseResponse.success(returnDto);
+                    }
                 }
             } catch (Exception e) {
                 throw new RuntimeException(e);
