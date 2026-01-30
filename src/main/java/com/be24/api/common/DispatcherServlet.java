@@ -39,8 +39,14 @@ public class DispatcherServlet extends HttpServlet {
             return;
         }
 
+        // 토큰을 확인하는 코드
+
+
         // 컨트롤러가 있으면 컨트롤러의 작업을 실행
         BaseResponse res = controller.process(req, resp);
+
+
+
         resp.getWriter().write(JsonParser.from(res));
     }
 }

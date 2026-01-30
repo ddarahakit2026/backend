@@ -21,7 +21,7 @@ public class AppConfig {
     private final BoardService boardService = new BoardService(boardRepository);
     private final BoardController boardController = new BoardController(boardService);
 
-    private final UserController userController = new UserController();
+    private final UserController userController = new UserController(ds);
 
     private final Ex01Controller ex01Controller = new Ex01Controller(ds);
 
@@ -31,6 +31,7 @@ public class AppConfig {
         ds.setJdbcUrl("jdbc:mariadb://10.10.10.30:3306/test");
         ds.setUsername("root");
         ds.setPassword("qwer1234");
+
 
         controllerMap.put("/board/register", boardController);
         controllerMap.put("/board/read", boardController);
