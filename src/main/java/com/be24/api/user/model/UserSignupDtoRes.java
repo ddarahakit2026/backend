@@ -1,14 +1,14 @@
-package com.be24.api.user;
+package com.be24.api.user.model;
 
-public class UserSignupDroRes {
+public class UserSignupDtoRes {
     Integer idx;
     String email;
     String name;
 
-    public UserSignupDroRes() {
+    public UserSignupDtoRes() {
     }
 
-    public UserSignupDroRes(Integer idx, String email, String name) {
+    public UserSignupDtoRes(Integer idx, String email, String name) {
         this.idx = idx;
         this.email = email;
         this.name = name;
