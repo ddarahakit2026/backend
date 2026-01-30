@@ -1,14 +1,18 @@
 package com.be24.api.common;
 
 import com.be24.api.board.BoardController;
+import com.be24.api.board.BoardCpRepositoryImpl;
 import com.be24.api.board.BoardRepository;
 import com.be24.api.board.BoardService;
+import com.be24.api.ex01.Ex01Controller;
 import com.be24.api.user.UserController;
+import com.zaxxer.hikari.HikariDataSource;
 
 import java.util.HashMap;
 import java.util.Map;
 
 public class AppConfig {
+
     private final Map<String, Controller> controllerMap = new HashMap<>();
 
     private final HikariDataSource ds = new HikariDataSource();
@@ -18,6 +22,10 @@ public class AppConfig {
     private final BoardController boardController = new BoardController(boardService);
 
     private final UserController userController = new UserController();
+
+    private final Ex01Controller ex01Controller = new Ex01Controller(ds);
+
+
     // 처음 객체가 생성될 때 controllerMap에 uri를 키로 컨트롤러 객체를 값으로 저장
     public AppConfig() {
         ds.setJdbcUrl("jdbc:mariadb://10.10.10.30:3306/test");
