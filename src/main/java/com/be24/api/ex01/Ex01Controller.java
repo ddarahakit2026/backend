@@ -8,6 +8,10 @@ import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 
 import javax.sql.DataSource;
+import java.sql.Connection;
+import java.sql.PreparedStatement;
+import java.sql.ResultSet;
+import java.sql.Statement;
 
 public class Ex01Controller implements Controller {
     private final DataSource ds;
@@ -25,7 +29,27 @@ public class Ex01Controller implements Controller {
             System.out.println("DB에서 목록을 조회하는 코드");
         } else if (req.getRequestURI().contains("register") && req.getMethod().equals("POST")) {
             Ex01RegisterDto dto = JsonParser.from(req, Ex01RegisterDto.class);
-            System.out.println("DB에 등록하는 코드");
+
+            try {
+                Class.forName("org.mariadb.jdbc.Driver");
+
+                // DB 연결 객체를 다 사용하고 나면 반납할 수 있도록 수정
+                try (Connection conn = ds.getConnection()) {
+                    PreparedStatement pstmt = conn.prepareStatement(
+                            "INSERT INTO ex01 (data01, data02, data03) VALUES (?, ?, ?)",
+                            Statement.RETURN_GENERATED_KEYS);
+                    pstmt.setString(1, dto.getData01());
+                    pstmt.setInt(2, dto.getData02());
+                    pstmt.setString(3, dto.getData03());
+
+
+                    pstmt.executeUpdate();
+
+                }
+            } catch (Exception e) {
+                throw new RuntimeException(e);
+            }
+
 
 
         }
