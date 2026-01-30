@@ -16,6 +16,7 @@ public class Ex01Controller implements Controller {
         } else if (req.getRequestURI().contains("list") && req.getMethod().equals("GET")) {
             System.out.println("DB에서 목록을 조회하는 코드");
         } else if (req.getRequestURI().contains("register") && req.getMethod().equals("POST")) {
+            Ex01RegisterDto dto = JsonParser.from(req, Ex01RegisterDto.class);
             System.out.println("DB에 등록하는 코드");
         }
         return null;
