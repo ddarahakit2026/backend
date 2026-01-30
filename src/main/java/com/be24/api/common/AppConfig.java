@@ -28,7 +28,11 @@ public class AppConfig {
         controllerMap.put("/board/read", boardController);
         controllerMap.put("/user/signup", userController);
         controllerMap.put("/user/login", userController);
-        controllerMap.put("/ex01/test", ex01Controller);
+
+        controllerMap.put("/ex01/read", ex01Controller);
+        controllerMap.put("/ex01/list", ex01Controller);
+        controllerMap.put("/ex01/register", ex01Controller);
+
     }
 
     // 특정 uri를 이용해서 특정 컨트롤러 객체를 반환하는 메소드
