@@ -26,6 +26,28 @@ public class Ex01Controller implements Controller {
         if (req.getRequestURI().contains("read") && req.getMethod().equals("GET")) {
             Integer ex01Idx = Integer.parseInt(req.getParameter("idx"));
 
+
+
+
+            try {
+                Class.forName("org.mariadb.jdbc.Driver");
+
+                try (Connection conn = ds.getConnection()) {
+                    PreparedStatement pstmt = conn.prepareStatement(
+                            "SELECT * FROM ex01 WHERE idx=?");
+                    pstmt.setInt(1, ex01Idx);
+                    ResultSet rs = pstmt.executeQuery();
+
+                }
+            } catch (Exception e) {
+                throw new RuntimeException(e);
+            }
+
+
+
+
+
+
         } else if (req.getRequestURI().contains("list") && req.getMethod().equals("GET")) {
             System.out.println("DB에서 목록을 조회하는 코드");
         } else if (req.getRequestURI().contains("register") && req.getMethod().equals("POST")) {
