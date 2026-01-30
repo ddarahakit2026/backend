@@ -12,6 +12,8 @@ import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.Statement;
+import java.util.ArrayList;
+import java.util.List;
 
 public class Ex01Controller implements Controller {
     private final DataSource ds;
@@ -37,7 +39,16 @@ public class Ex01Controller implements Controller {
                             "SELECT * FROM ex01 WHERE idx=?");
                     pstmt.setInt(1, ex01Idx);
                     ResultSet rs = pstmt.executeQuery();
+                    if (rs.next()) {
+                        Ex01ReadRes returnDto = new Ex01ReadRes(
+                                rs.getInt("idx"),
+                                rs.getString("data01"),
+                                rs.getInt("data02"),
+                                rs.getString("data03")
+                        );
 
+                        return BaseResponse.success(returnDto);
+                    }
                 }
             } catch (Exception e) {
                 throw new RuntimeException(e);
@@ -49,7 +60,46 @@ public class Ex01Controller implements Controller {
 
 
         } else if (req.getRequestURI().contains("list") && req.getMethod().equals("GET")) {
-            System.out.println("DB에서 목록을 조회하는 코드");
+
+
+
+            try {
+                Class.forName("org.mariadb.jdbc.Driver");
+
+                try (Connection conn = ds.getConnection()) {
+                    PreparedStatement pstmt = conn.prepareStatement(
+                            "SELECT * FROM ex01");
+                    ResultSet rs = pstmt.executeQuery();
+
+                    List<Ex01ReadRes> list = new ArrayList<>();
+
+                    while (rs.next()) {
+                        Ex01ReadRes returnDto = new Ex01ReadRes(
+                                rs.getInt("idx"),
+                                rs.getString("data01"),
+                                rs.getInt("data02"),
+                                rs.getString("data03")
+                        );
+                        list.add(returnDto);
+                    }
+
+                    return BaseResponse.success(list);
+
+                }
+            } catch (Exception e) {
+                throw new RuntimeException(e);
+            }
+
+
+
+
+
+
+
+
+
+
+
         } else if (req.getRequestURI().contains("register") && req.getMethod().equals("POST")) {
             Ex01RegisterDto dto = JsonParser.from(req, Ex01RegisterDto.class);
 
