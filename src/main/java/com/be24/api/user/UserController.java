@@ -83,6 +83,14 @@ public class UserController implements Controller {
                     if (rs.next()) {
                         // 토큰 생성해서 응답에 토큰을 넣어줘야 한다.
 
+                        String key = "sdfkhgsdkglnhoiurjdfoihgh397478thgwr390289gyrfhp90823uoevbdo823uvh4tf";
+                        SecretKey encodedKey = Keys.hmacShaKeyFor(Decoders.BASE64.decode(key));
+                        String jwt = Jwts.builder()
+                                .claim("idx",rs.getInt("idx"))
+                                .claim("email",rs.getString("email"))
+                                .issuedAt(new Date()).expiration(new Date(System.currentTimeMillis() + 300000)).signWith(encodedKey).compact();
+
+                        resp.setHeader("Set-Cookie", "ATOKEN="+jwt + "; Path=/");
 
                         return BaseResponse.success("로그인 성공");
                     }

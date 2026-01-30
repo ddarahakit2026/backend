@@ -1,14 +1,20 @@
 package com.be24.api.common;
 
 import com.be24.api.utils.JsonParser;
+import io.jsonwebtoken.Claims;
+import io.jsonwebtoken.Jwts;
+import io.jsonwebtoken.io.Decoders;
+import io.jsonwebtoken.security.Keys;
 import jakarta.servlet.ServletConfig;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.annotation.MultipartConfig;
 import jakarta.servlet.annotation.WebServlet;
+import jakarta.servlet.http.Cookie;
 import jakarta.servlet.http.HttpServlet;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 
+import javax.crypto.SecretKey;
 import java.io.IOException;
 
 @WebServlet(urlPatterns = "/")
@@ -39,12 +45,32 @@ public class DispatcherServlet extends HttpServlet {
             return;
         }
 
+
+        BaseResponse res = null;
         // 토큰을 확인하는 코드
+        if(req.getRequestURI().contains("/board/register")) {
+            if(req.getCookies() != null) {
+                for(Cookie cookie:req.getCookies()) {
+                    if(cookie.getName().equals("ATOKEN")) {
+                        String key = "sdfkhgsdkglnhoiurjdfoihgh397478thgwr390289gyrfhp90823uoevbdo823uvh4tf";
+                        SecretKey encodedKey = Keys.hmacShaKeyFor(Decoders.BASE64.decode(key));
 
+                        String token = cookie.getValue();
+                        Claims claims = Jwts.parser()
+                                .verifyWith(encodedKey)
+                                .build()
+                                .parseSignedClaims(token)
+                                .getPayload();
+                        System.out.println(claims.get("email", String.class));
+                        res = controller.process(req, resp);
 
-        // 컨트롤러가 있으면 컨트롤러의 작업을 실행
-        BaseResponse res = controller.process(req, resp);
-
+                    }
+                }
+            }
+        } else {
+            // 컨트롤러가 있으면 컨트롤러의 작업을 실행
+            res = controller.process(req, resp);
+        }
 
 
         resp.getWriter().write(JsonParser.from(res));
