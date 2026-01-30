@@ -24,7 +24,8 @@ public class Ex01Controller implements Controller {
     public BaseResponse process(HttpServletRequest req, HttpServletResponse resp) {
 
         if (req.getRequestURI().contains("read") && req.getMethod().equals("GET")) {
-            System.out.println("DB에서 1개만 조회하는 코드");
+            Integer ex01Idx = Integer.parseInt(req.getParameter("idx"));
+
         } else if (req.getRequestURI().contains("list") && req.getMethod().equals("GET")) {
             System.out.println("DB에서 목록을 조회하는 코드");
         } else if (req.getRequestURI().contains("register") && req.getMethod().equals("POST")) {
