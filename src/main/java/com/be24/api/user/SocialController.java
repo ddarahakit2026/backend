@@ -32,6 +32,9 @@ public class SocialController implements Controller {
             String token = JwtUtil.createToken(returnDto.getIdx(), returnDto.getEmail());
             resp.setHeader("Set-Cookie", "ATOKEN="+token + "; Path=/");
 
+            resp.setStatus(302);
+            resp.setHeader("Location", "http://localhost:5173/main");
+
             return BaseResponse.success(returnDto);
         } catch (IOException e) {
             throw new RuntimeException(e);
