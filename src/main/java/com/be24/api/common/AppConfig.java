@@ -6,6 +6,8 @@ import com.be24.api.board.BoardRepository;
 import com.be24.api.board.BoardService;
 import com.be24.api.ex01.Ex01Controller;
 import com.be24.api.user.UserController;
+import com.be24.api.user.UserRepository;
+import com.be24.api.user.UserService;
 import com.zaxxer.hikari.HikariDataSource;
 
 import java.util.HashMap;
@@ -21,7 +23,9 @@ public class AppConfig {
     private final BoardService boardService = new BoardService(boardRepository);
     private final BoardController boardController = new BoardController(boardService);
 
-    private final UserController userController = new UserController(ds);
+    private final UserRepository userRepository = new UserRepository(ds);
+    private final UserService userService = new UserService(userRepository);
+    private final UserController userController = new UserController(userService);
 
     private final Ex01Controller ex01Controller = new Ex01Controller(ds);
 

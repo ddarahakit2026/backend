@@ -1,6 +1,7 @@
 package com.be24.api.common;
 
 import com.be24.api.utils.JsonParser;
+import com.be24.api.utils.JwtUtil;
 import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.io.Decoders;
@@ -52,18 +53,12 @@ public class DispatcherServlet extends HttpServlet {
             if(req.getCookies() != null) {
                 for(Cookie cookie:req.getCookies()) {
                     if(cookie.getName().equals("ATOKEN")) {
-                        String key = "sdfkhgsdkglnhoiurjdfoihgh397478thgwr390289gyrfhp90823uoevbdo823uvh4tf";
-                        SecretKey encodedKey = Keys.hmacShaKeyFor(Decoders.BASE64.decode(key));
-
-                        String token = cookie.getValue();
-                        Claims claims = Jwts.parser()
-                                .verifyWith(encodedKey)
-                                .build()
-                                .parseSignedClaims(token)
-                                .getPayload();
-                        System.out.println(claims.get("email", String.class));
+                        // JwtUtil에서 토큰 생성 및 확인하도록 리팩토링
+                        Integer userIdx = JwtUtil.getUserIdx(cookie.getValue());
+                        System.out.println(userIdx);
+                        // 컨트롤러한테 사용자 정보를 전달
+                        req.setAttribute("userIdx", userIdx);
                         res = controller.process(req, resp);
-
                     }
                 }
             }

@@ -1,16 +1,14 @@
-package com.be24.api.user;
+package com.be24.api.user.model;
 
-public class UserSignupDto {
+public class UserLoginDto {
     String email;
-    String name;
     String password;
 
-    public UserSignupDto() {
+    public UserLoginDto() {
     }
 
-    public UserSignupDto(String email, String name, String password) {
+    public UserLoginDto(String email, String password) {
         this.email = email;
-        this.name = name;
         this.password = password;
     }
 
@@ -20,14 +18,6 @@ public class UserSignupDto {
 
     public void setEmail(String email) {
         this.email = email;
-    }
-
-    public String getName() {
-        return name;
-    }
-
-    public void setName(String name) {
-        this.name = name;
     }
 
     public String getPassword() {
