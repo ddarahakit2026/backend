@@ -29,7 +29,7 @@ public class SocialController implements Controller {
             HttpClient client;
             client = HttpClient.newHttpClient();
 
-            String data = "grant_type=authorization_code&client_id=바꿔주세요&redirect_uri=바꿔주세요"+code;
+            String data = "grant_type=authorization_code&client_id="+System.getenv("KAKAO_CLIENT_ID")+"&redirect_uri="+System.getenv("KAKAO_REDIRECT_URI")+"&code="+code;
             HttpRequest httpReq = HttpRequest.newBuilder()
                     .uri(URI.create("https://kauth.kakao.com/oauth/token"))
                     .header("Content-Type", "application/x-www-form-urlencoded;charset=utf-8")
