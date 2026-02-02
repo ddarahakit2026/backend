@@ -31,7 +31,7 @@ public class AppConfig {
 
     private final Ex01Controller ex01Controller = new Ex01Controller(ds);
 
-    private final SocialController socialController = new SocialController();
+    private final SocialController socialController = new SocialController(userService);
     private final OrdersController ordersController = new OrdersController();
 
 
