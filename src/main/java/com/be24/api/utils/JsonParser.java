@@ -10,6 +10,15 @@ import java.io.IOException;
 public class JsonParser {
     private static final ObjectMapper objectMapper = new ObjectMapper();
 
+    public static <T> T from(String res, Class<T> clazz) {
+        try {
+            return objectMapper.readValue(res, clazz);
+        }catch (IOException e) {
+            throw new RuntimeException(e);
+        }
+    }
+
+
     public static <T> T from(HttpServletRequest req, Class<T> clazz) {
         try {
             return objectMapper.readValue(req.getReader(), clazz);
