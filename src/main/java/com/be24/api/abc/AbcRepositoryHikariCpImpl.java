@@ -2,23 +2,23 @@ package com.be24.api.abc;
 
 import com.be24.api.abc.repository.AbcRepository;
 
+import javax.sql.DataSource;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.SQLException;
-import java.sql.Statement;
 import java.util.List;
 import java.util.Optional;
 
-public class AbcRepositoryJdbcImpl implements AbcRepository {
-    private final Connection conn;
+public class AbcRepositoryHikariCpImpl implements AbcRepository {
+    private final DataSource ds;
 
-    public AbcRepositoryJdbcImpl(Connection conn) {
-        this.conn = conn;
+    public AbcRepositoryHikariCpImpl(DataSource ds) {
+        this.ds = ds;
     }
 
     @Override
     public Abc save(Abc abc) {
-        try {
+        try(Connection conn = ds.getConnection()) {
             PreparedStatement pstmt = conn.prepareStatement("INSERT INTO abc (name) VALUES (?)");
             pstmt.setString(1, abc.getName());
             pstmt.executeUpdate();
