@@ -1,5 +1,9 @@
 package com.be24.api.common;
 
+import com.be24.api.abc.AbcController;
+import com.be24.api.abc.AbcRepository;
+import com.be24.api.abc.AbcRepositoryJdbcImpl;
+import com.be24.api.abc.AbcService;
 import com.be24.api.board.BoardController;
 import com.be24.api.board.BoardCpRepositoryImpl;
 import com.be24.api.board.BoardRepository;
@@ -34,6 +38,12 @@ public class AppConfig {
     private final SocialController socialController = new SocialController(userService);
     private final OrdersController ordersController = new OrdersController();
 
+    private final AbcRepository abcRepository = new AbcRepositoryJdbcImpl();
+    private final AbcService abcService = new AbcService(abcRepository);
+    private final AbcController abcController = new AbcController(abcService);
+
+
+
 
     // 처음 객체가 생성될 때 controllerMap에 uri를 키로 컨트롤러 객체를 값으로 저장
     public AppConfig() {
@@ -54,6 +64,7 @@ public class AppConfig {
         controllerMap.put("/social/kakao/redirect", socialController);
         controllerMap.put("/orders/verify", ordersController);
 
+        controllerMap.put("/abc", abcController);
     }
 
     // 특정 uri를 이용해서 특정 컨트롤러 객체를 반환하는 메소드
